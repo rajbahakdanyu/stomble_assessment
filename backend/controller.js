@@ -59,14 +59,7 @@ async function ImportVCard(req, res) {
             data: {
                 name: card.getProperty("FN")[0].value,
                 email: card.getProperty("EMAIL")[0].value,
-                telephone: {
-                    create: [
-                        {
-                            label: "mobile",
-                            number: card.getProperty("TEL")[0].value,
-                        },
-                    ],
-                },
+                number: card.getProperty("TEL")[0].value,
                 userId: parseInt(userId),
             },
         })
@@ -90,12 +83,6 @@ async function GetContacts(req, res) {
             where: { userId: parseInt(req.params.id) },
         })
 
-        var number = await prisma.tel.findMany({
-            where: { contactId: parseInt(contacts[0].id) },
-        })
-
-        contacts[0]["tel"] = number[0].number
-
         res.json({
             statusCode: 200,
             body: contacts,
@@ -109,4 +96,62 @@ async function GetContacts(req, res) {
     }
 }
 
-module.exports = { Register, Login, ImportVCard, GetContacts }
+async function CreateEntry(req, res) {
+    var { userId, name, email, number } = req.body
+
+    try {
+        await prisma.contact.create({
+            data: {
+                name: name,
+                email: email,
+                number: number,
+                userId: parseInt(userId),
+            },
+        })
+
+        res.json({
+            statusCode: 200,
+            body: "Entry recorded successfully",
+        })
+    } catch (error) {
+        console.log(error)
+        res.json({
+            statusCode: 400,
+            body: "User could not be created",
+        })
+    }
+}
+
+async function DeleteEntry(req, res) {
+    var { userId, name, email, number } = req.body
+
+    try {
+        await prisma.contact.delete({
+            where: {
+                userId: parseInt(userId),
+                name: name,
+                telephone: number,
+            },
+        })
+
+        res.json({
+            statusCode: 200,
+            body: "Entry deleted successfully",
+        })
+    } catch (error) {
+        console.log(error)
+        res.json({
+            statusCode: 400,
+            body: "User could not be deleted",
+        })
+    }
+}
+
+module.exports = {
+    Register,
+    Login,
+    ImportVCard,
+    GetContacts,
+    CreateEntry,
+    DeleteEntry,
+}
