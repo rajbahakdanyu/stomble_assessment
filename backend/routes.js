@@ -1,11 +1,10 @@
-var express = require("express")
-var router = express.Router()
+const express = require("express")
+const controller = require("./controller")
 
-router.get("/", function (req, res) {
-    res.send("GET route on things.")
-})
-router.post("/", function (req, res) {
-    res.send("POST route on things.")
-})
+const router = express.Router()
+
+router.post("/register", controller.Register)
+
+router.post("/login", controller.Login)
 
 module.exports = router
