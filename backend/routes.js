@@ -12,4 +12,6 @@ router.post("/login", controller.Login)
 
 router.post("/import", upload.single("vcard"), controller.ImportVCard)
 
+router.get("/getContacts/:id", controller.GetContacts)
+
 module.exports = router

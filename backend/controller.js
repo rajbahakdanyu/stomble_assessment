@@ -73,15 +73,40 @@ async function ImportVCard(req, res) {
 
         res.json({
             statusCode: 200,
-            message: "File uploaded successfully",
+            body: "File uploaded successfully",
         })
     } catch (error) {
         console.log(error)
         res.json({
             statusCode: 400,
-            message: "Sorry file could not be uploaded",
+            body: "Sorry file could not be uploaded",
         })
     }
 }
 
-module.exports = { Register, Login, ImportVCard }
+async function GetContacts(req, res) {
+    try {
+        var contacts = await prisma.contact.findMany({
+            where: { userId: parseInt(req.params.id) },
+        })
+
+        var number = await prisma.tel.findMany({
+            where: { contactId: parseInt(contacts[0].id) },
+        })
+
+        contacts[0]["tel"] = number[0].number
+
+        res.json({
+            statusCode: 200,
+            body: contacts,
+        })
+    } catch (error) {
+        console.log(error)
+        res.json({
+            statusCode: 200,
+            body: "No contacts found",
+        })
+    }
+}
+
+module.exports = { Register, Login, ImportVCard, GetContacts }
