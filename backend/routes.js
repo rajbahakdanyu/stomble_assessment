@@ -16,4 +16,6 @@ router.get("/getContacts/:id", controller.GetContacts)
 
 router.post("/create", controller.CreateEntry)
 
+router.delete("/delete/:id", controller.DeleteEntry)
+
 module.exports = router

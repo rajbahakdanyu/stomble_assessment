@@ -123,14 +123,10 @@ async function CreateEntry(req, res) {
 }
 
 async function DeleteEntry(req, res) {
-    var { userId, name, email, number } = req.body
-
     try {
         await prisma.contact.delete({
             where: {
-                userId: parseInt(userId),
-                name: name,
-                telephone: number,
+                id: parseInt(req.params.id),
             },
         })
 
