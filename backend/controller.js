@@ -1,5 +1,7 @@
 const crypto = require("crypto-js")
 const { PrismaClient } = require("@prisma/client")
+const fs = require("fs")
+const vCard = require("vcf")
 
 const prisma = new PrismaClient()
 
@@ -42,4 +44,23 @@ async function Login(req, res) {
     }
 }
 
-module.exports = { Register, Login }
+async function ImportVCard(req, res) {
+    var { usedId } = req.body
+    var { path } = req.file
+
+    var contact = await fs.promises
+        .readFile(path)
+        .then((contact) => contact.toString())
+
+    var card = new vCard().parse(contact)
+
+    try {
+        await prisma.contact.create({
+            data: card.data,
+        })
+    } catch (error) {}
+
+    res.json({ message: "Successfully uploaded files" })
+}
+
+module.exports = { Register, Login, ImportVCard }
