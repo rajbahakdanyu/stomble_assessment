@@ -10,7 +10,7 @@ router.post("/register", controller.Register)
 
 router.post("/login", controller.Login)
 
-router.post("/import", upload.single("vcard"), controller.ImportVCard)
+router.post("/import/:id", upload.single("vcard"), controller.ImportVCard)
 
 router.get("/getContacts/:id", controller.GetContacts)
 

@@ -45,7 +45,7 @@ async function Login(req, res) {
 }
 
 async function ImportVCard(req, res) {
-    var { userId } = req.body
+    var userId = req.params.id
     var { path } = req.file
 
     var contact = await fs.promises
