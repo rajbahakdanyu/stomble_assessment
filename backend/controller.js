@@ -117,7 +117,7 @@ async function CreateEntry(req, res) {
         console.log(error)
         res.json({
             statusCode: 400,
-            body: "User could not be created",
+            body: "Entry could not be created",
         })
     }
 }
@@ -138,7 +138,29 @@ async function DeleteEntry(req, res) {
         console.log(error)
         res.json({
             statusCode: 400,
-            body: "User could not be deleted",
+            body: "Entry could not be deleted",
+        })
+    }
+}
+
+async function UpdateEntry(req, res) {
+    try {
+        await prisma.contact.update({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            data: req.body,
+        })
+
+        res.json({
+            statusCode: 200,
+            body: "Entry updated successfully",
+        })
+    } catch (error) {
+        console.log(error)
+        res.json({
+            statusCode: 400,
+            body: "Entry could not be updated",
         })
     }
 }
@@ -150,4 +172,5 @@ module.exports = {
     GetContacts,
     CreateEntry,
     DeleteEntry,
+    UpdateEntry,
 }

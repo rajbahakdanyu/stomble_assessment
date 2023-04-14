@@ -18,4 +18,6 @@ router.post("/create", controller.CreateEntry)
 
 router.delete("/delete/:id", controller.DeleteEntry)
 
+router.post("/update/:id", controller.UpdateEntry)
+
 module.exports = router
