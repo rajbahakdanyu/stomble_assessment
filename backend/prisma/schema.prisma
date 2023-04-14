@@ -21,7 +21,7 @@ model User {
 
 model Contact {
   id        Int      @id @default(autoincrement())
-  name      String?
+  name      String
   email     String?
   telephone Tel[]
   user      User     @relation(fields: [userId], references: [id])
