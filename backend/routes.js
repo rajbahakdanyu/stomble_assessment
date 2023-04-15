@@ -10,6 +10,15 @@ router.post("/register", controller.Register)
 
 router.post("/login", controller.Login)
 
+router.use((req, res, next) => {
+    session = req.session
+    if (session.userid) {
+        next()
+    } else {
+        res.json({ statusCode: 400 })
+    }
+})
+
 router.post("/import/:id", upload.single("vcard"), controller.ImportVCard)
 
 router.get("/getContacts/:id", controller.GetContacts)
@@ -19,5 +28,7 @@ router.post("/create", controller.CreateEntry)
 router.delete("/delete/:id", controller.DeleteEntry)
 
 router.post("/update/:id", controller.UpdateEntry)
+
+router.post("/logout", controller.LogOut)
 
 module.exports = router

@@ -9,12 +9,15 @@ async function Register(req, res) {
     var { email, password } = req.body
 
     try {
-        await prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 email: email,
                 password: crypto.SHA256(password).toString(crypto.enc.Base64),
             },
         })
+
+        session = req.session
+        session.userid = user.id
 
         res.json({ statusCode: 200, body: "User created successfully" })
     } catch (error) {
@@ -35,6 +38,11 @@ async function Login(req, res) {
         if (
             user.password == crypto.SHA256(password).toString(crypto.enc.Base64)
         ) {
+            session = req.session
+            session.userid = user.id
+
+            console.log(session)
+
             res.json({ statusCode: 200, body: "User exists" })
         } else {
             res.json({ statusCode: 400, body: "Password is incorrect" })
@@ -165,6 +173,14 @@ async function UpdateEntry(req, res) {
     }
 }
 
+function LogOut(req, res) {
+    req.session.destroy()
+    res.json({
+        statusCode: 200,
+        body: "Logout successful",
+    })
+}
+
 module.exports = {
     Register,
     Login,
@@ -173,4 +189,5 @@ module.exports = {
     CreateEntry,
     DeleteEntry,
     UpdateEntry,
+    LogOut,
 }
