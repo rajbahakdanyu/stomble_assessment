@@ -89,6 +89,9 @@ async function GetContacts(req, res) {
     try {
         var contacts = await prisma.contact.findMany({
             where: { userId: parseInt(req.params.id) },
+            orderBy: {
+                name: { sort: "asc", nulls: "first" },
+            },
         })
 
         res.json({
