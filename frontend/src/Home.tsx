@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Spinner } from "react-bootstrap"
+import { Button, Col, Row, Spinner, Stack } from "react-bootstrap"
 import { Navigate } from "react-router-dom"
 import ContactList from "./ContactList"
 
@@ -50,7 +50,18 @@ const Home = ({ userId }: Props) => {
     ) : contacts.length == 0 ? (
         <>No Contacts found</>
     ) : (
-        <ContactList contacts={contacts} updatingContacts={updatingContacts} />
+        <Stack gap={3}>
+            <Row>
+                <Col>Contact List</Col>
+                <Col>
+                    <Button variant='primary'>Import</Button>
+                </Col>
+            </Row>
+            <ContactList
+                contacts={contacts}
+                updatingContacts={updatingContacts}
+            />
+        </Stack>
     )
 }
 
