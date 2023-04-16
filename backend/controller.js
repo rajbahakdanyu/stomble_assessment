@@ -16,10 +16,10 @@ async function Register(req, res) {
             },
         })
 
-        session = req.session
-        session.userid = user.id
-
-        res.json({ statusCode: 200, body: "User created successfully" })
+        res.json({
+            statusCode: 200,
+            body: { message: "User created successfully", userId: user.id },
+        })
     } catch (error) {
         res.json({ statusCode: 400, body: "User already exists" })
     }
@@ -38,12 +38,10 @@ async function Login(req, res) {
         if (
             user.password == crypto.SHA256(password).toString(crypto.enc.Base64)
         ) {
-            session = req.session
-            session.userid = user.id
-
-            console.log(session)
-
-            res.json({ statusCode: 200, body: "User exists" })
+            res.json({
+                statusCode: 200,
+                body: { message: "Login successful", userId: user.id },
+            })
         } else {
             res.json({ statusCode: 400, body: "Password is incorrect" })
         }
