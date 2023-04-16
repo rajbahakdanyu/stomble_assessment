@@ -1,6 +1,8 @@
-import React from "react"
+interface Props {
+    userId: number
+}
 
-const ContactForm = () => {
+const ContactForm = ({ userId }: Props) => {
     return <div>ContactForm</div>
 }
 
