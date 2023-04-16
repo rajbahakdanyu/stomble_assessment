@@ -30,7 +30,7 @@ const Home = ({ userId }: Props) => {
                     temp = [...temp, element]
                 }
 
-                updateContacts(temp)
+                updatingContacts(temp)
 
                 isFetching(false)
             })
@@ -39,6 +39,10 @@ const Home = ({ userId }: Props) => {
             })
     }, [])
 
+    function updatingContacts(data: Contact[]) {
+        updateContacts(data)
+    }
+
     return userId == 0 ? (
         <Navigate to={"/"} />
     ) : fetching ? (
@@ -46,7 +50,7 @@ const Home = ({ userId }: Props) => {
     ) : contacts.length == 0 ? (
         <>No Contacts found</>
     ) : (
-        <ContactList contacts={contacts} />
+        <ContactList contacts={contacts} updatingContacts={updatingContacts} />
     )
 }
 

@@ -158,7 +158,11 @@ async function UpdateEntry(req, res) {
             where: {
                 id: parseInt(req.params.id),
             },
-            data: req.body,
+            data: {
+                name: req.body.name,
+                email: req.body.email,
+                number: req.body.number,
+            },
         })
 
         res.json({

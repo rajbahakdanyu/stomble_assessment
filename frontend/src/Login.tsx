@@ -35,7 +35,6 @@ const Login = ({ updateUserId }: Props) => {
                 if (data.statusCode == 200) {
                     setHidden(true)
                     updateUserId(data.body.userId)
-                    console.log(data)
                     navigate("/home", { replace: true })
                 } else {
                     setHidden(false)
