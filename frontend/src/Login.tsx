@@ -1,6 +1,6 @@
 import { FormEvent, useRef, useState } from "react"
-import { Button, Form, Stack } from "react-bootstrap"
-import { redirect, useNavigate } from "react-router-dom"
+import { Button, Col, Form, Row, Stack } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
 
 interface Props {
     updateUserId: React.Dispatch<React.SetStateAction<number>>
@@ -11,6 +11,7 @@ const Login = ({ updateUserId }: Props) => {
     const passwordRef = useRef<HTMLInputElement>(null)
 
     const [isHidden, setHidden] = useState<boolean>(true)
+    const [isRegister, setRegister] = useState<boolean>(false)
     const navigate = useNavigate()
 
     const handleSubmit = (e: FormEvent) => {
@@ -24,14 +25,17 @@ const Login = ({ updateUserId }: Props) => {
             }),
         }
 
-        fetch(`http://127.0.0.1:8080/api/login`, requestOptions)
+        let url = isRegister
+            ? `http://127.0.0.1:8080/api/register`
+            : `http://127.0.0.1:8080/api/login`
+
+        fetch(url, requestOptions)
             .then((res) => res.json())
             .then((data) => {
                 if (data.statusCode == 200) {
                     setHidden(true)
                     updateUserId(data.body.userId)
                     console.log(data)
-
                     navigate("/home", { replace: true })
                 } else {
                     setHidden(false)
@@ -60,11 +64,29 @@ const Login = ({ updateUserId }: Props) => {
                         required
                     />
                 </Form.Group>
+                <Row className='justify-content-md-center'>
+                    <Col>
+                        <Form.Text className='text-muted'>
+                            {isRegister
+                                ? "Already have an account?"
+                                : "Don't have an account?"}
+                        </Form.Text>
+                    </Col>
+                    <Col>
+                        <Form.Text
+                            className='text-muted'
+                            onClick={() => setRegister(!isRegister)}>
+                            {isRegister ? "Login" : "Register"}
+                        </Form.Text>
+                    </Col>
+                </Row>
                 <Form.Text className='text-muted' hidden={isHidden}>
-                    Username or password incorrect
+                    {isRegister
+                        ? "User already exists"
+                        : "Email or password incorrect"}
                 </Form.Text>
                 <Button variant='primary' type='submit'>
-                    Login
+                    {isRegister ? "Register" : "Login"}
                 </Button>
             </Stack>
         </Form>
